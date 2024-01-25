@@ -7,7 +7,9 @@ Author: Who wrote it
 Maintainer: Who to complain to <yourfault@somewhere.net>
 Description: More about what it does (maybe more than one line)
 License: What license is it under?
+Encoding: UTF-8
 Depends: 
     R (>= 3.4.0)
 Imports: 
     mnormt
+RoxygenNote: 7.2.3

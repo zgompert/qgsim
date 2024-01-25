@@ -1,3 +1,24 @@
+#' Simulate evolution
+#'
+#' This function simulates evolution for a pair of quantitative traits using a quantitative genetic model. Evolution occurs by selection, drift and migration. Simulations can be for any number of populations and can involve various forms of adaptive peak movement.
+#' @param npops number of populations to simulate.
+#' @param mig the migration rate, this is the total proportion of individuals in each population made up of migrants from the other populations.
+#' @param theta0 this specifies the initial optimal value for the traits, you can supply a single value (applied to both traits), one value per trait, or a matrix with one value per population (row) and trait (column).
+#' @param z0 this specifies the initial trait values, you can supply a single value (applied to both traits), one value per trait, or a matrix with one value per population (row) and trait (column).
+#' @param h2 the trait heritabilities, assumed to be the same for both traits (must be between 0 and 1).
+#' @param Gcor the genetic correlation between the pair of traits (must be between -1 and 1).
+#' @param omega11 denotes the intensity of selection (curvature of the adaptive landscape) with respect to trait 1, larger values result in weaker selection [default = 1].
+#' @param omega22 denotes the intensity of selection (curvature of the adaptive landscape) with respect to trait 2, larger values result in weaker selection [default = 1].
+#' @param omegaCor denotes the strength of correlational selection, larger values denote stronger selection for combinations of trait 1 and trait 2 (must be between -1 and 1, 0 denotes independent selection on each trait) [default = 0].
+#' @param model denotes the model for adaptive peak movement, must be one of the following: "Browning", "Uncorrelated", or "Trend"; detailed descriptions are provided below.
+#' @param ngens number of generations to simulate [default = 100].
+#' @param tsd standard deviation for peak movement, larger values denote larger (random) jumps in adaptive peak locations (must be a positive number).
+#' @param tmn average direction shift in the location of the adaptive landscape, only relevant for the "Trend" model (can be negative or positive, but must be a single value for both traits).
+#'
+#' @details
+#' With the Brownian motion peak shift model, a random normal deviation with standard deviation tsd is added to the peak location each generation. With the Uncorrelated peak shift model, the peak location is follows a normal distribution with independent peak locations each generation. The peak location for each trait is specifically drawn from a normal distribution with mean 0 and standard deviation tst. Finally for Trend, the peak location shifts by a random normal deviation each generation with a mean tmn and standard deviation tsd. In all cases, peak shifts occur independently in each population.
+#'
+#' @return A list with two objects, the mean trait values (z) and adaptive peak locations (theta). Each of these is itself a list with one matrix per population. The population matrixes have two columns, one per trait, and one row per generation.
 qgsim <-
 function(npops=2,mig=0,Ne=500,theta0=0,z0=0,h2=0.5,Gcor=0.2,omega11=1,omega22=1,omegaCor=0,model="Brownian",
     ngens=100,tsd=0.02,tmn=0.01){
@@ -41,9 +62,9 @@ function(npops=2,mig=0,Ne=500,theta0=0,z0=0,h2=0.5,Gcor=0.2,omega11=1,omega22=1,
 			if(model=="Brownian"){ ## Brownian random walk
 		                theta<-theta+rnorm(ntraits,0,tsd)
            		} else if (model=="Uncorrelated"){ ## sample normal each time, independent
-				theta<-rnorm(traits,0,tsd)
+				theta<-rnorm(ntraits,0,tsd)
 			} else if (model=="Trend"){ ## changes by trend plus noise
-				theta<-rnorm(traits,tmn,tsd)
+				theta<-theta+rnorm(ntraits,tmn,tsd)
 			}
 			## evolution happens, selection and drift	
 			## z' = z + (theta - z)/omega * G + N(0,G/Ne)
