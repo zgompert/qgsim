@@ -11,14 +11,14 @@ var_covar_mat_vis(h2 = 0.5, Gcor = 0.2, omega11 = 1, omega22 = 1, omegaCor = 0)
 
 \item{Gcor}{the genetic correlation between the pair of traits (must be between -1 and 1).}
 
-\item{omega11}{denotes the intensity of selection (curvature of the adaptive landscape) with respect to trait 1, larger values result in weaker selection [default = 1].}
+\item{omega11}{denotes the intensity of selection (curvature of the adaptive landscape) with respect to trait 1, larger values result in weaker selection \link{default = 1}.}
 
-\item{omega22}{denotes the intensity of selection (curvature of the adaptive landscape) with respect to trait 2, larger values result in weaker selection [default = 1].}
+\item{omega22}{denotes the intensity of selection (curvature of the adaptive landscape) with respect to trait 2, larger values result in weaker selection \link{default = 1}.}
 
-\item{omegaCor}{denotes the strength of correlational selection, larger values denote stronger selection for combinations of trait 1 and trait 2 (must be between -1 and 1, 0 denotes independent selection on each trait) [default = 0].}
+\item{omegaCor}{denotes the strength of correlational selection, larger values denote stronger selection for combinations of trait 1 and trait 2 (must be between -1 and 1, 0 denotes independent selection on each trait) \link{default = 0}.}
 }
 \value{
-The plot showing 95% CI for both generated matrices
+The plot showing 95\% CI for both generated matrices
 }
 \description{
 Visualize the G and omega variance/covariance matrices generated in qgsim
