@@ -132,6 +132,32 @@ qgsim_repl <- function(nreps=1, summaries=c(), npops=2,mig=0,Ne=500,theta0=0,z0=
     res.z[[i]]<-res$z
     res.theta[[i]]<-res$theta
   }
+
+  # add in summaries
+
+  if ("mean_evol_rate" %in% summaries) {
+    # average rate of change in each trait across generations and populations
+
+    # sum the differences in each trait
+    for (rep_i in 1:nreps) {
+      delta_sum <- 0
+      z <- res.z[[rep_i]]
+      for (pop_i in 1:npops) {
+        pop <- z[[pop_i]]
+        for (gen_i in 2:ngens) {
+          # add trait 1 delta
+          delta_sum <- delta_sum + pop[gen_i, 1] - pop[gen_i-1, 1]
+          # add trait 2 delta
+          delta_sum <- delta_sum + pop[gen_i, 2] - pop[gen_i-1, 2]
+        }
+      }
+      # divide by (# traits) * (# generations) * (# populations)
+      mean_evol_rate <- delta_sum / (2 * ngens * npops)
+      sum_mat[rep_i,'mean_evol_rate'] <- mean_evol_rate
+    }
+  }
   
   return(sum_mat)
 }
+
+print(qgsim_repl(nreps=10, summaries = c('mean_evol_rate', 'mean_evol_lag')))
