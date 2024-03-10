@@ -96,7 +96,7 @@ function(npops=2,mig=0,Ne=500,theta0=0,z0=0,h2=0.5,Gcor=0.2,omega11=1,omega22=1,
 #' Simulate evolution (with replicates and summaries)
 #'
 #' This function is a wrapper for the gqsim function which lets you run replicates and get summaries.
-#' The summaries currently available include: mean rate of evolution ('mean_evol_rate', average change in each trait across populations and generations), evolutionary lag ('mean_evol_lag', average distance in bivaraiate trait space between the optimal phenotypes and z), correlations in evolution between traits ('mean_traitwise_cor', averaged over time and populations) and correlations in evolution across populations ('mean_popwise_cor', averaged over time and traits).
+#' The summaries currently available include: mean rate of evolution ('mean_evol_rate', average change in each trait across populations and generations), evolutionary lag ('mean_evol_lag', average distance in bivaraiate trait space between the optimal phenotypes and z), correlations in evolution between traits ('mean_traitwise_corr', averaged over time and populations) and correlations in evolution across populations ('mean_popwise_corr', averaged over time and traits).
 #' @param nreps number of replicates to run
 #' @param summaries a vector of strings containing any summaries to be included in the results
 #' @param npops number of populations to simulate.
@@ -119,6 +119,14 @@ function(npops=2,mig=0,Ne=500,theta0=0,z0=0,h2=0.5,Gcor=0.2,omega11=1,omega22=1,
 #' @return A list with two objects, the mean trait values (z) and adaptive peak locations (theta). Each of these is itself a list with one matrix per population. The population matrixes have two columns, one per trait, and one row per generation.
 qgsim_repl <- function(nreps=1, summaries=c(), npops=2,mig=0,Ne=500,theta0=0,z0=0,h2=0.5,Gcor=0.2,
     omega11=1,omega22=1,omegaCor=0,model="Brownian",ngens=100,tsd=0.02,tmn=0.01) {
+
+  # check that requested summaries are valid
+  valid_summaries <- c('mean_evol_rate', 'mean_evol_lag', 'mean_traitwise_corr', 'mean_popwise_corr')
+  invalid_summaries <- setdiff(summaries, valid_summaries)
+  if (length(invalid_summaries) > 0) {
+    stop(paste("Error: Invalid summary/summaries: ", paste(invalid_summaries, collapse=", "), ". Must be in: ", paste(valid_summaries, collapse = ", "), ".", sep=""))
+  }
+
   res.z<-list()
   res.theta<-list()
   
@@ -151,13 +159,47 @@ qgsim_repl <- function(nreps=1, summaries=c(), npops=2,mig=0,Ne=500,theta0=0,z0=
           delta_sum <- delta_sum + pop[gen_i, 2] - pop[gen_i-1, 2]
         }
       }
-      # divide by (# traits) * (# generations) * (# populations)
-      mean_evol_rate <- delta_sum / (2 * ngens * npops)
+      # divide by (# traits) * (# generation deltas) * (# populations)
+      mean_evol_rate <- delta_sum / (2 * (ngens-1) * npops)
       sum_mat[rep_i,'mean_evol_rate'] <- mean_evol_rate
     }
   }
   
+  if ("mean_evol_lag" %in% summaries) {
+    for (rep_i in 1:nreps) {
+      delta_sum <- 0
+      z <- res.z[[rep_i]]
+      theta <- res.theta[[rep_i]]
+      for (pop_i in 1:npops) {
+        pop.z <- z[[pop_i]]
+        pop.theta <- theta[[pop_i]]
+
+        t1_dist <- sum(abs(pop.z[,1] - pop.theta[,1]))
+        t2_dist <- sum(abs(pop.z[,2] - pop.theta[,2]))
+        delta_sum <- delta_sum + t1_dist + t2_dist
+      }
+      # divide by (#traits) * (# generation deltas) * (# populations)
+      mean_evol_lag <- delta_sum / (2 * ngens * npops)
+      sum_mat[rep_i, 'mean_evol_lag'] <- mean_evol_lag
+    }
+  }
+
+  if ("mean_traitwise_corr" %in% summaries) {
+    for (rep_i in 1:nreps) {
+      corr_sum <- 0
+      z <- res.z[[rep_i]]
+      for (pop_i in 1:npops) {
+        pop.z <- z[[pop_i]]
+        # adding correlation between trait values in a population
+        corr_sum <- corr_sum + cor(pop.z[,1], pop.z[,2])
+      }
+      # divide by (# populations)
+      mean_traitwise_corr <- corr_sum / npops
+      sum_mat[rep_i, 'mean_traitwise_corr'] <- mean_traitwise_corr
+    }
+  }
+
   return(sum_mat)
 }
 
-print(qgsim_repl(nreps=10, summaries = c('mean_evol_rate', 'mean_evol_lag')))
+print(qgsim_repl(nreps=10, summaries = c('mean_evol_rate', 'mean_evol_lag', 'mean_traitwise_corr')))
