@@ -199,7 +199,25 @@ qgsim_repl <- function(nreps=1, summaries=c(), npops=2,mig=0,Ne=500,theta0=0,z0=
     }
   }
 
+  if ("mean_popwise_corr" %in% summaries) {
+    for (rep_i in 1:nreps) {
+      corr_sum <- 0
+      ncors<-0
+      z <- res.z[[rep_i]]
+      for (pop1_i in 1:(npops-1)) {
+        for (pop2_i in (pop1_i+1):npops) {
+          pop1.z <- z[[pop1_i]]
+          pop2.z <- z[[pop2_i]]
+          corr_sum <- corr_sum + cor(pop1.z[,1], pop2.z[,1])
+          corr_sum <- corr_sum + cor(pop1.z[,2], pop2.z[,2])
+          ncors <- ncors + 2
+        }
+      }
+      # divide by number of correlations
+      mean_popwise_corr <- corr_sum / ncors
+      sum_mat[rep_i, 'mean_popwise_corr'] <- mean_popwise_corr
+    }
+  }
+
   return(sum_mat)
 }
-
-print(qgsim_repl(nreps=10, summaries = c('mean_evol_rate', 'mean_evol_lag', 'mean_traitwise_corr')))
