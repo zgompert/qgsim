@@ -31,6 +31,19 @@ library(qgsim)
 ## h2 = .5, genetic correlation = 0
 ## omega11 = omega22 = 1, omegaCor = 0
 ## Brownnian model, tsd = .05
-simOut<-qgsim_func(npops=2, mig=0, Ne=500, h2=0.5, Gcor=0, omega11=1, omega22=1, omegaCor=0, model="Brownnian", ngens=100, tsd=0.05)
+simOut<-qgsim_func(npops=2, mig=0, Ne=500, h2=0.5, Gcor=0, omega11=1, omega22=1, omegaCor=0, model="Brownian", ngens=100, tsd=0.05)
+
+## view optimal trait values (theta) for population 1
+simOut$theta[[1]]
+
+## view mean trait values (z) for population 1
+simOut$z[[1]]
+
+## view lag, mean - optimal, for trait 1
+lag<-simOut$z[[1]]-simOut$theta[[1]]
+lag
+
+## compute mean lag over simulation for each trait
+apply(lag,MARGIN=2,mean)
 
 ```
