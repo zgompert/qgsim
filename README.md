@@ -82,3 +82,11 @@ qgsim_plot_bivar(simOut,1,c("z1","theta1"),type='l')
 ## plot of optimal versus mean for trait 2
 qgsim_plot_bivar(simOut,1,c("z2","theta2"),type='l')
 ```
+Use the helper function `var_covar_mat_vis` to visualize G and Omega matrixes. This can be useful to make example figures or to aid in your decision making about parameters to use.
+
+```R
+## load the qgsim package
+library(qgsim)
+## make the plot
+var_covar_mat_vis(h2=.5,Gcor=.3,omega11=1,omega22=1,omegaCor=-0.3)
+```
