@@ -13,7 +13,7 @@
 #' @param omega11 denotes the intensity of selection (curvature of the adaptive landscape) with respect to trait 1, larger values result in weaker selection [default = 1].
 #' @param omega22 denotes the intensity of selection (curvature of the adaptive landscape) with respect to trait 2, larger values result in weaker selection [default = 1].
 #' @param omegaCor denotes the strength of correlational selection, larger values denote stronger selection for combinations of trait 1 and trait 2 (must be between -1 and 1, 0 denotes independent selection on each trait) [default = 0].
-#' @param model denotes the model for adaptive peak movement, must be one of the following: "Browning", "Uncorrelated", or "Trend"; detailed descriptions are provided below.
+#' @param model denotes the model for adaptive peak movement, must be one of the following: "Brownian", "Uncorrelated", or "Trend"; detailed descriptions are provided below.
 #' @param ngens number of generations to simulate [default = 100].
 #' @param tsd standard deviation for peak movement, larger values denote larger (random) jumps in adaptive peak locations (must be a positive number).
 #' @param tmn average direction shift in the location of the adaptive landscape, only relevant for the "Trend" model (can be negative or positive, but must be a single value for both traits).
@@ -41,7 +41,7 @@ qgsim_repl <- function(nreps=1, summaries=c(), npops=2,mig=0,Ne=500,theta0=0,z0=
   sum_mat[,'replicate']<-1:nreps
   
   for (i in 1:nreps) {
-    res<-qgsim_func(npops=npops,mig=mig,Ne=Ne,theta0=theta0,z0=z0,h2=0.5,Gcor=0.2,omega11=omega11,omega22=omega22,omegaCor=omegaCor,model=model,ngens=100,tsd=tsd, tmn=tmn)
+    res<-qgsim_func(npops=npops,mig=mig,Ne=Ne,theta0=theta0,z0=z0,h2=h2,Gcor=Gcor,omega11=omega11,omega22=omega22,omegaCor=omegaCor,model=model,ngens=ngens,tsd=tsd, tmn=tmn)
     res.z[[i]]<-res$z
     res.theta[[i]]<-res$theta
   }
