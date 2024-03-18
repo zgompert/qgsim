@@ -47,3 +47,18 @@ lag
 apply(lag,MARGIN=2,mean)
 
 ```
+Run and summarize multiple replicate simulations with `qgsim_repl`.
+
+```
+## load the qgsim package
+library(qgsim)
+## type help(qgsim_repl) to view the help page
+
+## ten replicates each with h2 = 0.01, 0.5 or 0.99
+## compute and report the average lag between optimal and mean trait values
+qgsim_repl(nreps=10,c("mean_evol_lag"),npops=2, mig=0, Ne=500, h2=0.01, Gcor=0, omega11=1, omega22=1, omegaCor=0, model="Trend", ngens=100, tmn=.05,tsd=0.05)
+qgsim_repl(nreps=10,c("mean_evol_lag"),npops=2, mig=0, Ne=500, h2=0.5, Gcor=0, omega11=1, omega22=1, omegaCor=0, model="Trend", ngens=100, tmn=.05,tsd=0.05)
+qgsim_repl(nreps=10,c("mean_evol_lag"),npops=2, mig=0, Ne=500, h2=0.99, Gcor=0, omega11=1, omega22=1, omegaCor=0, model="Trend", ngens=100, tmn=.05,tsd=0.05)
+
+## see the help page for other valid summaries
+```
