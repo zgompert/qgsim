@@ -46,7 +46,7 @@ qgsim_repl(
 
 \item{omegaCor}{denotes the strength of correlational selection, larger values denote stronger selection for combinations of trait 1 and trait 2 (must be between -1 and 1, 0 denotes independent selection on each trait) \link{default = 0}.}
 
-\item{model}{denotes the model for adaptive peak movement, must be one of the following: "Browning", "Uncorrelated", or "Trend"; detailed descriptions are provided below.}
+\item{model}{denotes the model for adaptive peak movement, must be one of the following: "Brownian", "Uncorrelated", or "Trend"; detailed descriptions are provided below.}
 
 \item{ngens}{number of generations to simulate \link{default = 100}.}
 
