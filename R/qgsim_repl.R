@@ -41,7 +41,7 @@ qgsim_repl <- function(nreps=1, summaries=c(), npops=2,mig=0,Ne=500,theta0=0,z0=
   sum_mat[,'replicate']<-1:nreps
   
   for (i in 1:nreps) {
-    res<-qgsim(npops=npops,mig=mig,Ne=Ne,theta0=theta0,z0=z0,h2=0.5,Gcor=0.2,omega11=omega11,omega22=omega22,omegaCor=omegaCor,model=model,ngens=100,tsd=tsd, tmn=tmn)
+    res<-qgsim_func(npops=npops,mig=mig,Ne=Ne,theta0=theta0,z0=z0,h2=0.5,Gcor=0.2,omega11=omega11,omega22=omega22,omegaCor=omegaCor,model=model,ngens=100,tsd=tsd, tmn=tmn)
     res.z[[i]]<-res$z
     res.theta[[i]]<-res$theta
   }
