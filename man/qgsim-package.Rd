@@ -8,3 +8,12 @@
 \description{
 This package was developed for educational purposes. It can be used to simulate quantitative trait evolution on dynamic adapative landscapes for multiple populations. Two traits are modeled and these evolve by selection, drift and gene flow.
 }
+\author{
+\strong{Maintainer}: Zachariah Gompert \email{zach.gompert@usu.edu} (\href{https://orcid.org/0000-0003-2248-2488}{ORCID})
+
+Authors:
+\itemize{
+  \item Ethan Dayley \email{ethan.dayley@usu.edu}
+}
+
+}

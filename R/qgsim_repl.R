@@ -1,7 +1,7 @@
 #' Simulate evolution (with replicates and summaries)
 #'
 #' This function is a wrapper for the gqsim function which lets you run replicates and get summaries.
-#' The summaries currently available include: mean rate of evolution ('mean_evol_rate', average change in each trait across populations and generations), evolutionary lag ('mean_evol_lag', average distance in bivaraiate trait space between the optimal phenotypes and z), correlations in evolution between traits ('mean_traitwise_corr', averaged over time and populations) and correlations in evolution across populations ('mean_popwise_corr', averaged over time and traits).
+#' The summaries currently available include: mean rate of evolution ('mean_evol_rate', average change in each trait across populations and generations), evolutionary lag ('mean_evol_lag', average distance in bivaraiate trait space between the optimal phenotypes and z), correlations in evolution between traits ('mean_traitwise_corr', averaged over time and populations), correlations in evolution across populations ('mean_popwise_corr', averaged over time and traits), and the variance in mean trait values across populations in the final generation ('end_phenotypic_variance', averagec over traits).
 #' @param nreps number of replicates to run
 #' @param summaries a vector of strings containing any summaries to be included in the results
 #' @param npops number of populations to simulate.
@@ -26,7 +26,7 @@ qgsim_repl <- function(nreps=1, summaries=c(), npops=2,mig=0,Ne=500,theta0=0,z0=
     omega11=1,omega22=1,omegaCor=0,model="Brownian",ngens=100,tsd=0.02,tmn=0.01) {
 
   # check that requested summaries are valid
-  valid_summaries <- c('mean_evol_rate', 'mean_evol_lag', 'mean_traitwise_corr', 'mean_popwise_corr')
+  valid_summaries <- c('mean_evol_rate', 'mean_evol_lag', 'mean_traitwise_corr', 'mean_popwise_corr', 'end_phenotypic_variance')
   invalid_summaries <- setdiff(summaries, valid_summaries)
   if (length(invalid_summaries) > 0) {
     stop(paste("Error: Invalid summary/summaries: ", paste(invalid_summaries, collapse=", "), ". Must be in: ", paste(valid_summaries, collapse = ", "), ".", sep=""))
@@ -121,6 +121,20 @@ qgsim_repl <- function(nreps=1, summaries=c(), npops=2,mig=0,Ne=500,theta0=0,z0=
       # divide by number of correlations
       mean_popwise_corr <- corr_sum / ncors
       sum_mat[rep_i, 'mean_popwise_corr'] <- mean_popwise_corr
+    }
+  }
+
+  if ("end_phenotypic_variance" %in% summaries) {
+    for (rep_i in 1:nreps) {
+      z <- res.z[[rep_i]]
+      z_end<-matrix(NA, nrow=npops, ncol=2) ## two traits
+      for (pop in 1:npops) {
+          z_end[pop,1]<-z[[pop]][ngens,1]
+          z_end[pop,2]<-z[[pop]][ngens,2]      
+      }
+      # calcualte variance and take mean for the two traits
+      end_pheno_var <-mean(apply(z_end,2,var))
+      sum_mat[rep_i, 'end_phenotypic_variance'] <- end_pheno_var
     }
   }
 
