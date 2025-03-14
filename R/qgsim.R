@@ -14,6 +14,7 @@
 #' @param ngens number of generations to simulate [default = 100].
 #' @param tsd standard deviation for peak movement, larger values denote larger (random) jumps in adaptive peak locations (must be a positive number).
 #' @param tmn average direction shift in the location of the adaptive landscape, only relevant for the "Trend" model (can be negative or positive, but must be a single value for both traits).
+#' @export
 #'
 #' @details
 #' With the Brownian motion peak shift model, a random normal deviation with standard deviation tsd is added to the peak location each generation. With the Uncorrelated peak shift model, the peak location is follows a normal distribution with independent peak locations each generation. The peak location for each trait is specifically drawn from a normal distribution with mean 0 and standard deviation tst. Finally for Trend, the peak location shifts by a random normal deviation each generation with a mean tmn and standard deviation tsd. In all cases, peak shifts occur independently in each population.

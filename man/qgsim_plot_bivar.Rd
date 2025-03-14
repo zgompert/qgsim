@@ -5,6 +5,8 @@
 \title{Generate a bivariate plot}
 \usage{
 qgsim_plot_bivar(qgsim_res, populations, vars, type = "p", pch = 16)
+
+qgsim_plot_bivar(qgsim_res, populations, vars, type = "p", pch = 16)
 }
 \arguments{
 \item{qgsim_res}{the results of a qgsim function call.}
@@ -18,6 +20,8 @@ qgsim_plot_bivar(qgsim_res, populations, vars, type = "p", pch = 16)
 \item{pch}{same as for base R plot() function}
 }
 \value{
+the output of an r plot() function displaying the required bivariate plot
+
 the output of an r plot() function displaying the required bivariate plot
 }
 \description{
