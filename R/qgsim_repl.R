@@ -60,9 +60,9 @@ qgsim_repl <- function(nreps=1, summaries=c(), npops=2,mig=0,Ne=500,theta0=0,z0=
         pop <- z[[pop_i]]
         for (gen_i in 2:ngens) {
           # add trait 1 delta
-          delta_sum <- abs(delta_sum + pop[gen_i, 1] - pop[gen_i-1, 1])
+          delta_sum <- delta_sum + abs(pop[gen_i, 1] - pop[gen_i-1, 1])
           # add trait 2 delta
-          delta_sum <- abs(delta_sum + pop[gen_i, 2] - pop[gen_i-1, 2])
+          delta_sum <- delta_sum + abs(pop[gen_i, 2] - pop[gen_i-1, 2])
         }
       }
       # divide by (# traits) * (# generation deltas) * (# populations)
